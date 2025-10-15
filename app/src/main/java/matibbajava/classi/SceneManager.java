@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import matibbajava.GCP;
 import matibbajava.controller.GeneraDBController;
+import matibbajava.controller.PrincipaleController;
 
 public class SceneManager {
 
@@ -37,5 +38,9 @@ public class SceneManager {
         } catch (IOException e) {
             GestioneEccezioni.errore("Errore caricamento file: " + fxmlFile, e, false, null);
         }
+    }
+
+    public static void apriPrincipale(Stage stage) {
+        cambioScena(stage, "principale.fxml", "GCB", (PrincipaleController controller) -> controller.setStage(stage));
     }
 }

@@ -10,6 +10,6 @@ public class MainController extends BasicController{
 
     @FXML
     public void verifica(){
-        return;
+        SceneManager.apriPrincipale(stage);
     }
 }

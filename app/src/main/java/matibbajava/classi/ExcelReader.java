@@ -17,8 +17,8 @@ public class ExcelReader extends Task<Void> {
     private final File root;
 
 
-    public ExcelReader(Connection conn, File root) {
-        this.conn = conn;
+    public ExcelReader(Database db, File root) {
+        this.conn = db.getConn();
         this.root = root;
     }
 
