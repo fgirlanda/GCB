@@ -40,6 +40,8 @@ public class PrincipaleController extends BasicController{
     @FXML
     public Text txtOutput;
 
+    public List<Long> listaCodici = new ArrayList<>();
+
     private List<Database> dbs = new ArrayList<>();
     private List<Database> dbsSelezionati = new ArrayList<>();
     private List<RadioButton> radios = new ArrayList<>();
@@ -94,14 +96,11 @@ public class PrincipaleController extends BasicController{
 
     @FXML
     public void verifica() throws SQLException {
-        Long codiceStart = creaCodice();
+        dbsSelezionati.clear();
+        listaCodici.clear();
+        List<Long> listaCodici = creaCodici();
         boolean presente = false;
         HashMap<Long, String> codiciPresenti = new HashMap<Long, String>();
-        int num = Integer.parseInt(txtNum.getText());
-        List<Long> listaCodici = new ArrayList<>();
-        for(int i = 0; i < num; i++){
-            listaCodici.add(codiceStart+i);
-        }
         for(RadioButton r : radios) {
             if(r.isSelected()) {
                 dbsSelezionati.add((Database)r.getUserData());
@@ -126,9 +125,24 @@ public class PrincipaleController extends BasicController{
     }
 
 
-    private Long creaCodice(){
+    private List<Long> creaCodici(){
         String codice12 = txtPaese.getText() + txtAzienda.getText() + txtNuovo.getText();
+        Long base = Long.parseLong(codice12);
+        int num = Integer.parseInt(txtNum.getText());
+
+        for(int i = 0; i < num; i++){
+            String codiceBase = String.format("%012d", base + i); // mantiene 12 cifre
+            int check = calcolaCheck(codiceBase);
+            String codiceCompleto = codiceBase + check;
+            listaCodici.add(Long.parseLong(codiceCompleto));
+        }
+
+        return listaCodici;
+    }
+
+    private int calcolaCheck(String codice12){
         int somma = 0;
+        int check = 0;
         for(int i = 0; i < codice12.length(); i++){
             int cifra = Character.getNumericValue(codice12.charAt(i));
             if(i%2 == 0){
@@ -138,13 +152,8 @@ public class PrincipaleController extends BasicController{
             }
         }
         int resto = somma % 10;
-        int check = (resto == 0) ? 0 : 10 - resto;
-
-        String codice = codice12 + check;
-
-        return Long.parseLong(codice);
+        return check = (resto == 0) ? 0 : 10 - resto;
     }
-
     @FXML
     public void indietro(){
         SceneManager.indietro(stage);
