@@ -1,25 +1,31 @@
 package matibbajava.classi;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class OutputManager {
 
-    public static String presente(HashMap<Long, String> codici_presenti){
+    public static String presente(HashMap<Long, String> codiciPresenti){
         String output = "";
-        if(codici_presenti.size() == 1){
+        if(codiciPresenti.size() == 1){
             output += "Il codice richiesto è già presente:\n\n";
         }else{
             output += "I codici richiesti sono già presenti:\n\n";
         }
-        output += "Codice\t\t" + "File\n\n";
-        for(Long codice : codici_presenti.keySet()){
-            output += codice + "\t\t" + codici_presenti.get(codice) + "\n";
+        output += "Codice\t\t\t\t" + "File\n\n";
+        for(Long codice : codiciPresenti.keySet()){
+            output += codice + "\t\t" + codiciPresenti.get(codice) + "\n";
         }
         return output;
     }
 
-    public static String nonPresente(){
-        String output = "Codice/i non presente/i.\n\n";
+    public static String nonPresente(List<Long> codiciRichiesti, int spazi){
+        String output = "Codice/i non presente/i.\n\n" +
+                "Spazi disponibili: "+spazi+"\n\n" +
+                "Codici disponibili generati: \n\n";
+        for(int i = 0; i < spazi;i++){
+            output += codiciRichiesti.get(i) + "\n";
+        }
         return output;
     }
 }

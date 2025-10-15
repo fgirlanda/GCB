@@ -41,6 +41,7 @@ public class PrincipaleController extends BasicController{
     public Text txtOutput;
 
     public List<Long> listaCodici = new ArrayList<>();
+    HashMap<Long, String> codiciPresenti = new HashMap<Long, String>();
 
     private List<Database> dbs = new ArrayList<>();
     private List<Database> dbsSelezionati = new ArrayList<>();
@@ -98,9 +99,11 @@ public class PrincipaleController extends BasicController{
     public void verifica() throws SQLException {
         dbsSelezionati.clear();
         listaCodici.clear();
+        codiciPresenti.clear();
+        int spazi = 0;
         List<Long> listaCodici = creaCodici();
         boolean presente = false;
-        HashMap<Long, String> codiciPresenti = new HashMap<Long, String>();
+
         for(RadioButton r : radios) {
             if(r.isSelected()) {
                 dbsSelezionati.add((Database)r.getUserData());
@@ -111,6 +114,8 @@ public class PrincipaleController extends BasicController{
                 if(db.checkDB(codice)){
                     presente = true;
                     codiciPresenti.put(codice, db.getNome());
+                }else{
+                    spazi++;
                 }
             }
         }
@@ -118,8 +123,7 @@ public class PrincipaleController extends BasicController{
         if(presente) {
             output = OutputManager.presente(codiciPresenti);
         }else{
-//            int spazi = calcolaSpazi()
-            output = OutputManager.nonPresente();
+            output = OutputManager.nonPresente(listaCodici, spazi);
         }
         txtOutput.setText(output);
     }
