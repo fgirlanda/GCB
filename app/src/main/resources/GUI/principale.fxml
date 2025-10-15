@@ -29,6 +29,14 @@
                   <Font size="14.0" />
                </font>
             </Button>
+            <Button fx:id="btnIndietro" mnemonicParsing="false" onAction="#indietro" text="Indietro">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="35.0" />
+               </HBox.margin>
+            </Button>
          </children>
       </HBox>
       <Separator opacity="0.5" />
@@ -106,11 +114,21 @@
          </children>
       </HBox>
       <Separator opacity="0.5" />
-      <Label text="Output:">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Label>
+      <HBox alignment="CENTER_LEFT" spacing="15.0">
+         <children>
+            <Label text="Output:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Separator prefHeight="12.0" prefWidth="429.0" visible="false" />
+          <Button fx:id="btnVerifica" mnemonicParsing="false" onAction="#verifica" text="Verifica">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
       <ScrollPane prefHeight="180.0">
          <content>
             <Text fx:id="txtOutput" strokeType="OUTSIDE" strokeWidth="0.0" />

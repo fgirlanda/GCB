@@ -14,11 +14,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import matibbajava.classi.Database;
+import matibbajava.classi.OutputManager;
 
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class PrincipaleController extends BasicController{
@@ -38,6 +40,7 @@ public class PrincipaleController extends BasicController{
     public Text txtOutput;
 
     private List<Database> dbs = new ArrayList<>();
+    private List<Database> dbsSelezionati = new ArrayList<>();
     private List<RadioButton> radios = new ArrayList<>();
 
 
@@ -54,6 +57,8 @@ public class PrincipaleController extends BasicController{
             }
         });
     }
+
+
     @FXML
     private void scegliCartella() throws SQLException {
         DirectoryChooser chooser = new DirectoryChooser();
@@ -63,6 +68,7 @@ public class PrincipaleController extends BasicController{
             loadDatabases(folder);
         }
     }
+
 
     private void loadDatabases(File folder) throws SQLException {
         grigliaDB.getChildren().clear();
@@ -84,4 +90,43 @@ public class PrincipaleController extends BasicController{
         }
     }
 
+
+    @FXML
+    public void verifica() throws SQLException {
+        Long codiceStart = creaCodice();
+        HashMap<Long, String> codiciPresenti = new HashMap<Long, String>();
+        int num = Integer.parseInt(txtNum.getText());
+        List<Long> listaCodici = new ArrayList<>();
+        for(int i = 0; i < num; i++){
+            listaCodici.add(codiceStart+i);
+        }
+        for(RadioButton r : radios) {
+            if(r.isSelected()) {
+                dbsSelezionati.add((Database)r.getUserData());
+            }
+        }
+        for(Database db : dbsSelezionati) {
+            for(Long codice : listaCodici){
+                if(db.checkDB(codice)){
+                    codiciPresenti.put(codice, db.getNome());
+                }
+            }
+        }
+        String output = OutputManager.dbPresente(codiciPresenti);
+        txtOutput.setText(output);
+    }
+
+
+    private Long creaCodice(){
+        String codPaese = txtPaese.getText();
+        String codAzienda = txtAzienda.getText();
+        String codNuovo = txtNuovo.getText();
+
+        return Long.parseLong(codPaese+codAzienda+codNuovo);
+    }
+
+    @FXML
+    public void indietro(){
+
+    }
 }

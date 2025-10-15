@@ -3,6 +3,8 @@
 - Sicurezza (login)
 - Vincoli su input (numero massimo di caratteri)
 - Verifica su file quando si genera un db (se si seleziona una cartella che non contiene file excel, il database non viene creato)
+- Interfaccia migliorata (abilita/disabilita pulsanti)
+- Gestione eccezioni intelligente
 
 #TODO
 - Aggiungere bottone verifica

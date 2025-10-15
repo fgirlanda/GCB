@@ -26,7 +26,7 @@ public class ExcelReader extends Task<Void> {
     public Void call() throws SQLException, IOException {
         creaTabella();
         percorriCartella(root);
-        updateProgress(1,1);
+        updateProgress(1, 1);
         updateMessage("Completato");
         return null;
     }
@@ -37,7 +37,7 @@ public class ExcelReader extends Task<Void> {
                     CREATE TABLE IF NOT EXISTS codici_barre (
                     nome_cartella TEXT,
                     nome_file TEXT,
-                    codice_a_barre TEXT PRIMARY KEY
+                    codice_a_barre DECIMAL(13) PRIMARY KEY
                 )""";
         try (Statement st = conn.createStatement()) {
             st.execute(cQuery);
@@ -59,7 +59,7 @@ public class ExcelReader extends Task<Void> {
                     processaExcel(f, nomeCartella);
                 } catch (Exception e) {
                     Platform.runLater(() ->
-                    GestioneEccezioni.errore("Errore nella lettura del file: "+f.getName(), null, false, null));
+                            GestioneEccezioni.errore("Errore nella lettura del file: " + f.getName(), e, false, null));
                 }
                 count++;
                 updateProgress(count, tot);
@@ -80,9 +80,9 @@ public class ExcelReader extends Task<Void> {
 
             for (Row row : sheet) {
                 for (Cell cell : row) {
-                    String valore = getCellValueAsString(cell);
+                    Long valore = getValore(cell);
 
-                    if (valore != null && valore.startsWith("830")) {
+                    if (valore != null && valore > 830000000) {
                         inserisciCodice(nomeCartella, fileExcel.getName(), valore);
                     }
                 }
@@ -91,36 +91,27 @@ public class ExcelReader extends Task<Void> {
     }
 
 
-    private String getCellValueAsString(Cell cell) {
+    private Long getValore(Cell cell) {
         if (cell == null) return null;
 
         return switch (cell.getCellType()) {
-            case STRING -> cell.getStringCellValue();
+            case STRING -> null;
             case NUMERIC -> {
-                if (DateUtil.isCellDateFormatted(cell)) {
-                    yield cell.getDateCellValue().toString(); // o formatta come vuoi
-                } else {
-                    double val = cell.getNumericCellValue();
-                    if (val == Math.floor(val)) { // numero intero
-                        yield String.valueOf((long) val);
-                    } else {
-                        yield String.valueOf(val);
-                    }
-                }
+                yield ((Double) cell.getNumericCellValue()).longValue();
             }
-            case BOOLEAN -> Boolean.toString(cell.getBooleanCellValue());
-            case FORMULA -> cell.getCellFormula(); // oppure valuta la formula con FormulaEvaluator
+            case FORMULA -> null;
+            case BOOLEAN -> null;
             case BLANK, _NONE, ERROR -> null;
         };
     }
 
 
-    private void inserisciCodice(String nomeCartella, String fileExcel, String codice) throws SQLException {
+    private void inserisciCodice(String nomeCartella, String fileExcel, Long codice) throws SQLException {
         String query = "INSERT INTO codici_barre (nome_cartella, nome_file, codice_a_barre) VALUES (?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, nomeCartella);
             ps.setString(2, fileExcel);
-            ps.setString(3, codice);
+            ps.setLong(3, codice);
             ps.executeUpdate();
         }
     }

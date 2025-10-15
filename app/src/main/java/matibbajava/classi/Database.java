@@ -1,9 +1,7 @@
 package matibbajava.classi;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class Database {
     File dir;
@@ -29,5 +27,13 @@ public class Database {
 
     public String getNome(){
         return nome;
+    }
+
+    public boolean checkDB(Long codice) throws SQLException {
+        String query = "SELECT codice_a_barre FROM codici_barre WHERE codice_a_barre = ?";
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setLong(1, codice);
+        ResultSet rs = ps.executeQuery();
+        return rs.next();
     }
 }
