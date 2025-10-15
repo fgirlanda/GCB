@@ -41,7 +41,19 @@ public class PrincipaleController extends BasicController{
     private List<RadioButton> radios = new ArrayList<>();
 
 
-
+    @FXML
+    public void initialize(){
+        radioSelTutti.setOnAction(e -> {
+            if(radios == null) return;
+            for(RadioButton r : radios) {
+                if(radioSelTutti.isSelected()) {
+                    r.setSelected(true);
+                }else{
+                    r.setSelected(false);
+                }
+            }
+        });
+    }
     @FXML
     private void scegliCartella() throws SQLException {
         DirectoryChooser chooser = new DirectoryChooser();
