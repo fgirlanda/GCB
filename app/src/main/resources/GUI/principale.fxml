@@ -104,13 +104,13 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <TextField fx:id="txtNuovo" prefWidth="70.0" promptText="000000" />
+            <TextField fx:id="txtNuovo" prefWidth="70.0" promptText="00000" />
             <Label text="Num. codici:">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <TextField fx:id="txtNum" prefHeight="25.0" prefWidth="70.0" promptText="000000" />
+            <TextField fx:id="txtNum" prefHeight="25.0" prefWidth="70.0" promptText="0" text="1" />
          </children>
       </HBox>
       <Separator opacity="0.5" />
@@ -121,8 +121,18 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <Separator prefHeight="12.0" prefWidth="429.0" visible="false" />
+            <Separator prefWidth="155.0" visible="false" />
           <Button fx:id="btnVerifica" mnemonicParsing="false" onAction="#verifica" text="Verifica">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnCopia" disable="true" mnemonicParsing="false" onAction="#copiaCodici" text="Copia codici">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnInserisci" disable="true" mnemonicParsing="false" onAction="#inserisci" text="Inserisci nel database">
                <font>
                   <Font size="14.0" />
                </font>

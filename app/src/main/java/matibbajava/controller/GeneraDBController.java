@@ -8,6 +8,7 @@ import javafx.stage.DirectoryChooser;
 import matibbajava.classi.Database;
 import matibbajava.classi.ExcelReader;
 import matibbajava.classi.GestioneEccezioni;
+import matibbajava.classi.SceneManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,14 +61,14 @@ public class GeneraDBController extends BasicController {
         selectedOutputDir = outputDir.showDialog(stage);
         if (selectedOutputDir == null) return;
         Database db = new Database(nomeDB, selectedOutputDir);
-//        File fileDB = new File(selectedOutputDir, nomeDB + ".db");
-//        String url = "jdbc:sqlite:" + fileDB.getAbsolutePath();
-//        Connection conn = DriverManager.getConnection(url);
         ExcelReader exr = new ExcelReader(db, selectedInputDir);
         pBar.progressProperty().bind(exr.progressProperty());
         pLabel.textProperty().bind(exr.messageProperty());
         new Thread(exr).start();
+    }
 
-
+    @FXML
+    public void indietro(){
+        SceneManager.indietro(stage);
     }
 }

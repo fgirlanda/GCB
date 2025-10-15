@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import matibbajava.classi.Database;
 import matibbajava.classi.OutputManager;
+import matibbajava.classi.SceneManager;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -94,6 +95,7 @@ public class PrincipaleController extends BasicController{
     @FXML
     public void verifica() throws SQLException {
         Long codiceStart = creaCodice();
+        boolean presente = false;
         HashMap<Long, String> codiciPresenti = new HashMap<Long, String>();
         int num = Integer.parseInt(txtNum.getText());
         List<Long> listaCodici = new ArrayList<>();
@@ -108,25 +110,53 @@ public class PrincipaleController extends BasicController{
         for(Database db : dbsSelezionati) {
             for(Long codice : listaCodici){
                 if(db.checkDB(codice)){
+                    presente = true;
                     codiciPresenti.put(codice, db.getNome());
                 }
             }
         }
-        String output = OutputManager.dbPresente(codiciPresenti);
+        String output = "";
+        if(presente) {
+            output = OutputManager.presente(codiciPresenti);
+        }else{
+//            int spazi = calcolaSpazi()
+            output = OutputManager.nonPresente();
+        }
         txtOutput.setText(output);
     }
 
 
     private Long creaCodice(){
-        String codPaese = txtPaese.getText();
-        String codAzienda = txtAzienda.getText();
-        String codNuovo = txtNuovo.getText();
+        String codice12 = txtPaese.getText() + txtAzienda.getText() + txtNuovo.getText();
+        int somma = 0;
+        for(int i = 0; i < codice12.length(); i++){
+            int cifra = Character.getNumericValue(codice12.charAt(i));
+            if(i%2 == 0){
+                somma += cifra;
+            }else{
+                somma += 3 * cifra;
+            }
+        }
+        int resto = somma % 10;
+        int check = (resto == 0) ? 0 : 10 - resto;
 
-        return Long.parseLong(codPaese+codAzienda+codNuovo);
+        String codice = codice12 + check;
+
+        return Long.parseLong(codice);
     }
 
     @FXML
     public void indietro(){
+        SceneManager.indietro(stage);
+    }
+
+    @FXML
+    public void copiaCodici(){
+
+    }
+
+    @FXML
+    public void inserisci(){
 
     }
 }

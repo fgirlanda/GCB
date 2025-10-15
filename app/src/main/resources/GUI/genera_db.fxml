@@ -10,13 +10,23 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="272.0" prefWidth="573.0" spacing="10.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="matibbajava.controller.GeneraDBController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="291.0" prefWidth="552.0" spacing="10.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="matibbajava.controller.GeneraDBController">
    <children>
-      <Label text="INPUT">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
+      <HBox alignment="CENTER_LEFT">
+         <children>
+            <Label text="INPUT">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Separator prefHeight="11.0" prefWidth="383.0" visible="false" />
+            <Button fx:id="btnIndietro" mnemonicParsing="false" onAction="#indietro" text="Indietro">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
       <HBox alignment="CENTER_LEFT" spacing="27.0">
          <children>
             <Label text="Seleziona la cartella che contiene i file excel desiderati: ">
@@ -70,6 +80,7 @@
             </Button>
          </children>
       </HBox>
+      <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
       <HBox spacing="15.0">
          <children>
             <Label text="Progresso:" />
@@ -79,6 +90,6 @@
       </HBox>
    </children>
    <padding>
-      <Insets left="20.0" top="15.0" />
+      <Insets bottom="10.0" left="20.0" top="15.0" />
    </padding>
 </VBox>

@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class OutputManager {
 
-    public static String dbPresente(HashMap<Long, String> codici_presenti){
+    public static String presente(HashMap<Long, String> codici_presenti){
         String output = "";
         if(codici_presenti.size() == 1){
             output += "Il codice richiesto è già presente:\n\n";
@@ -15,6 +15,11 @@ public class OutputManager {
         for(Long codice : codici_presenti.keySet()){
             output += codice + "\t\t" + codici_presenti.get(codice) + "\n";
         }
+        return output;
+    }
+
+    public static String nonPresente(){
+        String output = "Codice/i non presente/i.\n\n";
         return output;
     }
 }

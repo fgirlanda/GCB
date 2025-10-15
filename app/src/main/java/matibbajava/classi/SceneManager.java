@@ -9,16 +9,27 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import matibbajava.GCP;
 import matibbajava.controller.GeneraDBController;
+import matibbajava.controller.MainController;
 import matibbajava.controller.PrincipaleController;
 
 public class SceneManager {
 
     public static String guiPath = "/GUI/";
 
+
     public static void apriGeneraDB(Stage stage){
         cambioScena(stage, "genera_db.fxml", "GCB - Genera DB", (GeneraDBController controller) -> controller.setStage(stage));
     }
-    
+
+
+    public static void apriPrincipale(Stage stage) {
+        cambioScena(stage, "principale.fxml", "GCB - Verifica codici", (PrincipaleController controller) -> controller.setStage(stage));
+    }
+
+    public static void indietro(Stage stage){
+        cambioScena(stage, "main.fxml", "GCB", (MainController controller) -> controller.setStage(stage));
+    }
+
     public static <T> void cambioScena(Stage stage, String fxmlFile, String title,
             Consumer<T> controllerConsumer) {
         try {
@@ -38,9 +49,5 @@ public class SceneManager {
         } catch (IOException e) {
             GestioneEccezioni.errore("Errore caricamento file: " + fxmlFile, e, false, null);
         }
-    }
-
-    public static void apriPrincipale(Stage stage) {
-        cambioScena(stage, "principale.fxml", "GCB", (PrincipaleController controller) -> controller.setStage(stage));
     }
 }
