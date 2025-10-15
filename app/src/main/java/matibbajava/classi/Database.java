@@ -21,6 +21,14 @@ public class Database {
         return DriverManager.getConnection(url);
     }
 
+    public void disconnetti(){
+        try{
+            conn.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
     public Connection getConn(){
         return conn;
     }

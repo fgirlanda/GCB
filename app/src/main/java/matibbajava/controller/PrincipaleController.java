@@ -78,6 +78,10 @@ public class PrincipaleController extends BasicController{
         grigliaDB.getChildren().clear();
         dbs.clear();
         radios.clear();
+        dbsSelezionati.clear();
+        listaCodici.clear();
+        codiciPresenti.clear();
+        txtOutput.setText("");
         File[] files = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".db"));
         if (files == null) return;
 
@@ -100,8 +104,9 @@ public class PrincipaleController extends BasicController{
         dbsSelezionati.clear();
         listaCodici.clear();
         codiciPresenti.clear();
+        txtOutput.setText("");
         int spazi = 0;
-        List<Long> listaCodici = creaCodici();
+        creaCodici();
         boolean presente = false;
 
         for(RadioButton r : radios) {
@@ -129,19 +134,17 @@ public class PrincipaleController extends BasicController{
     }
 
 
-    private List<Long> creaCodici(){
+    private void creaCodici(){
         String codice12 = txtPaese.getText() + txtAzienda.getText() + txtNuovo.getText();
         Long base = Long.parseLong(codice12);
         int num = Integer.parseInt(txtNum.getText());
 
         for(int i = 0; i < num; i++){
-            String codiceBase = String.format("%012d", base + i); // mantiene 12 cifre
-            int check = calcolaCheck(codiceBase);
-            String codiceCompleto = codiceBase + check;
+            String codiceTemp = String.format("%012d", base + i);
+            int check = calcolaCheck(codiceTemp);
+            String codiceCompleto = codiceTemp + check;
             listaCodici.add(Long.parseLong(codiceCompleto));
         }
-
-        return listaCodici;
     }
 
     private int calcolaCheck(String codice12){
