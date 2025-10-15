@@ -35,10 +35,9 @@ public class ExcelReader extends Task<Void> {
     private void creaTabella() throws SQLException {
         String cQuery = """
                     CREATE TABLE IF NOT EXISTS codici_barre (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
                     nome_cartella TEXT,
                     nome_file TEXT,
-                    codice_a_barre TEXT
+                    codice_a_barre TEXT PRIMARY KEY
                 )""";
         try (Statement st = conn.createStatement()) {
             st.execute(cQuery);
