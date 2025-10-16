@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class PrincipaleController extends BasicController{
+public class PrincipaleController extends BasicController {
     @FXML
     public GridPane grigliaDB;
     @FXML
@@ -43,6 +43,7 @@ public class PrincipaleController extends BasicController{
     @FXML
     public Text txtOutput;
 
+    private File dbFolder;
     public List<Long> listaCodici = new ArrayList<>();
     HashMap<Long, List<String>> codiciPresenti = new HashMap<Long, List<String>>();
 
@@ -52,13 +53,13 @@ public class PrincipaleController extends BasicController{
 
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         radioSelTutti.setOnAction(e -> {
-            if(radios == null) return;
-            for(RadioButton r : radios) {
-                if(radioSelTutti.isSelected()) {
+            if (radios == null) return;
+            for (RadioButton r : radios) {
+                if (radioSelTutti.isSelected()) {
                     r.setSelected(true);
-                }else{
+                } else {
                     r.setSelected(false);
                 }
             }
@@ -70,15 +71,15 @@ public class PrincipaleController extends BasicController{
     private void scegliCartella() throws SQLException {
         DirectoryChooser chooser = new DirectoryChooser();
         chooser.setTitle("Seleziona cartella con file .db");
-        File folder = chooser.showDialog(grigliaDB.getScene().getWindow());
-        if (folder != null && folder.isDirectory()) {
-            lblDBDir.setText(folder.getAbsolutePath());
-            loadDatabases(folder);
+        dbFolder = chooser.showDialog(grigliaDB.getScene().getWindow());
+        if (dbFolder != null && dbFolder.isDirectory()) {
+            lblDBDir.setText(dbFolder.getAbsolutePath());
+            loadDatabases();
         }
     }
 
 
-    private void loadDatabases(File folder) throws SQLException {
+    private void loadDatabases() throws SQLException {
         grigliaDB.getChildren().clear();
         dbs.clear();
         radios.clear();
@@ -86,74 +87,86 @@ public class PrincipaleController extends BasicController{
         listaCodici.clear();
         codiciPresenti.clear();
         txtOutput.setText("");
-        File[] files = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".db"));
+        File[] files = dbFolder.listFiles((dir, name) -> name.toLowerCase().endsWith(".db"));
         if (files == null) return;
 
         for (File f : files) {
-            dbs.add(new Database(f.getName(), folder));
+            dbs.add(new Database(f.getName(), dbFolder));
         }
 
         for (int i = 0; i < dbs.size(); i++) {
             Database db = dbs.get(i);
             RadioButton radio = new RadioButton(db.getNome());
             radio.setUserData(db);
+            radio.setOnAction(e -> {
+               Database dbTemp = (Database) radio.getUserData();
+               if(radio.isSelected()) {
+                   dbsSelezionati.add(dbTemp);
+               }else{
+                   dbsSelezionati.remove(dbTemp);
+               }
+            });
             radios.add(radio);
-            grigliaDB.add(radio, i%3, i/3);
+            grigliaDB.add(radio, i % 3, i / 3);
         }
     }
 
 
     @FXML
     public void verifica() throws SQLException {
-        try {
-            dbsSelezionati.clear();
-            listaCodici.clear();
-            codiciPresenti.clear();
-            txtOutput.setText("");
-            int spazi = 0;
-            creaCodici();
-            boolean presente = false;
-
-            for(RadioButton r : radios) {
-                if(r.isSelected()) {
-                    dbsSelezionati.add((Database)r.getUserData());
-                }
-            }
-            for(Database db : dbsSelezionati) {
-                for(Long codice : listaCodici){
-                    if(db.checkDB(codice)){
-                        presente = true;
-                        if(codiciPresenti.containsKey(codice)){
-                            codiciPresenti.get(codice).add(db.getNome());
-                        }else{
-                            List<String> listaDB = new ArrayList<>();
-                            listaDB.add(db.getNome());
-                            codiciPresenti.put(codice, listaDB);
-                        }
-                    }else{
-                        spazi++;
-                    }
-                }
-            }
-            String output = "";
-            if(presente) {
-                output = OutputManager.presente(codiciPresenti);
-            }else{
-                output = OutputManager.nonPresente(listaCodici, spazi);
-            }
-            txtOutput.setText(output);
-        } catch (Exception e) {
-            GestioneEccezioni.errore("errore", e, false, null);
+        if(dbFolder == null || txtNuovo.getText().isBlank() || dbsSelezionati.isEmpty()) {
+            GestioneEccezioni.errore("Errore: dati mancanti.\n\n" +
+                    "Procedimento corretto:\n\n" +
+                    "1) Seleziona una cartella che contenga database (.db)\n\n" +
+                    "2) Seleziona uno o più database\n\n" +
+                    "3) Inserisci il nuovo codice di partenza e la quantità di etichette desiderate", null, false, null);
+            return;
         }
+        dbsSelezionati.clear();
+        listaCodici.clear();
+        codiciPresenti.clear();
+        txtOutput.setText("");
+        int spazi = 0;
+        creaCodici();
+        boolean presente = false;
+
+        for (RadioButton r : radios) {
+            if (r.isSelected()) {
+                dbsSelezionati.add((Database) r.getUserData());
+            }
+        }
+        for (Database db : dbsSelezionati) {
+            for (Long codice : listaCodici) {
+                if (db.checkDB(codice)) {
+                    presente = true;
+                    if (codiciPresenti.containsKey(codice)) {
+                        codiciPresenti.get(codice).add(db.getNome());
+                    } else {
+                        List<String> listaDB = new ArrayList<>();
+                        listaDB.add(db.getNome());
+                        codiciPresenti.put(codice, listaDB);
+                    }
+                } else {
+                    spazi++;
+                }
+            }
+        }
+        String output = "";
+        if (presente) {
+            output = OutputManager.presente(codiciPresenti);
+        } else {
+            output = OutputManager.nonPresente(listaCodici, spazi);
+        }
+        txtOutput.setText(output);
     }
 
 
-    private void creaCodici(){
+    private void creaCodici() {
         String codice12 = txtPaese.getText() + txtAzienda.getText() + txtNuovo.getText();
         Long base = Long.parseLong(codice12);
         int num = Integer.parseInt(txtNum.getText());
 
-        for(int i = 0; i < num; i++){
+        for (int i = 0; i < num; i++) {
             String codiceTemp = String.format("%012d", base + i);
             int check = calcolaCheck(codiceTemp);
             String codiceCompleto = codiceTemp + check;
@@ -161,38 +174,39 @@ public class PrincipaleController extends BasicController{
         }
     }
 
-    private int calcolaCheck(String codice12){
+    private int calcolaCheck(String codice12) {
         int somma = 0;
         int check = 0;
-        for(int i = 0; i < codice12.length(); i++){
+        for (int i = 0; i < codice12.length(); i++) {
             int cifra = Character.getNumericValue(codice12.charAt(i));
-            if(i%2 == 0){
+            if (i % 2 == 0) {
                 somma += cifra;
-            }else{
+            } else {
                 somma += 3 * cifra;
             }
         }
         int resto = somma % 10;
         return check = (resto == 0) ? 0 : 10 - resto;
     }
+
     @FXML
-    public void indietro(){
+    public void indietro() {
         SceneManager.indietro(stage);
     }
 
     @FXML
-    public void copiaCodici(){
+    public void copiaCodici() {
 
     }
 
     @FXML
     public void inserisci() throws SQLException {
-        if(dbsSelezionati.size() > 1){
+        if (dbsSelezionati.size() > 1) {
             GestioneEccezioni.errore("Seleziona un singolo database per l'inserimento", null, false, null);
             return;
         }
         Database dbSelezionato = dbsSelezionati.get(0);
-        for(Long codice : listaCodici){
+        for (Long codice : listaCodici) {
             dbSelezionato.inserisciCodice(codice, null, null);
         }
     }
