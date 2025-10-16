@@ -19,11 +19,11 @@ public class OutputManager {
         return output;
     }
 
-    public static String nonPresente(List<Long> codiciRichiesti, int spazi){
+    public static String nonPresente(List<Long> codiciRichiesti, int spaziTot, int spaziPerDB){
         String output = "Codice/i non presente/i.\n\n" +
-                "Spazi disponibili: "+spazi+"\n\n" +
+                "Spazi disponibili: "+spaziTot+" ("+spaziPerDB+" in ogni database selezionato)\n\n" +
                 "Codici disponibili generati: \n\n";
-        for(int i = 0; i < Math.min(spazi, codiciRichiesti.size());i++){
+        for(int i = 0; i < Math.min(spaziTot, codiciRichiesti.size());i++){
             output += codiciRichiesti.get(i) + "\n";
         }
         return output;

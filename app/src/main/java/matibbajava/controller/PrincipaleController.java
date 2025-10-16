@@ -7,6 +7,8 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -56,8 +58,11 @@ public class PrincipaleController extends BasicController {
     public void initialize() {
         radioSelTutti.setOnAction(e -> {
             if (radios == null) return;
+            dbsSelezionati.clear();
             for (RadioButton r : radios) {
                 if (radioSelTutti.isSelected()) {
+                    Database temp = (Database) r.getUserData();
+                    dbsSelezionati.add(temp);
                     r.setSelected(true);
                 } else {
                     r.setSelected(false);
@@ -155,7 +160,8 @@ public class PrincipaleController extends BasicController {
         if (presente) {
             output = OutputManager.presente(codiciPresenti);
         } else {
-            output = OutputManager.nonPresente(listaCodici, spazi);
+            int spaziPerDB = spazi / dbsSelezionati.size();
+            output = OutputManager.nonPresente(listaCodici, spazi, spaziPerDB);
         }
         txtOutput.setText(output);
     }
@@ -196,7 +202,20 @@ public class PrincipaleController extends BasicController {
 
     @FXML
     public void copiaCodici() {
-
+        String testo = "";
+        for(Long c: listaCodici){
+            testo += c+"\n";
+        }
+        if (!testo.isEmpty()) {
+            Clipboard clipboard = Clipboard.getSystemClipboard();
+            ClipboardContent content = new ClipboardContent();
+            content.putString(testo);
+            clipboard.setContent(content);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Eseguito");
+            alert.setHeaderText("\tCodici copiati negli appunti");
+            alert.showAndWait();
+        }
     }
 
     @FXML
@@ -209,5 +228,11 @@ public class PrincipaleController extends BasicController {
         for (Long codice : listaCodici) {
             dbSelezionato.inserisciCodice(codice, null, null);
         }
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Eseguito");
+        alert.setHeaderText("Codici inseriti nel database "+dbSelezionato.getNome());
+        alert.showAndWait();
     }
 }
+
+
