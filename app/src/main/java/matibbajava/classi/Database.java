@@ -38,10 +38,19 @@ public class Database {
     }
 
     public boolean checkDB(Long codice) throws SQLException {
-        String query = "SELECT codice_a_barre FROM codici_barre WHERE codice_a_barre = ?";
-        PreparedStatement ps = conn.prepareStatement(query);
-        ps.setLong(1, codice);
-        ResultSet rs = ps.executeQuery();
+        String queryCheck = "SELECT codice_a_barre FROM codici_barre WHERE codice_a_barre = ?";
+        PreparedStatement psCheck = conn.prepareStatement(queryCheck);
+        psCheck.setLong(1, codice);
+        ResultSet rs = psCheck.executeQuery();
         return rs.next();
+    }
+
+    public void inserisciCodice(Long codice, String nomeCartella, String nomeFile) throws SQLException {
+        String queryIns = "INSERT INTO codici_barre (nome_cartella, nome_file, codice_a_barre) VALUES (?, ?, ?)";
+        PreparedStatement psIns = conn.prepareStatement(queryIns);
+        psIns.setString(1, nomeCartella);
+        psIns.setString(2, nomeFile);
+        psIns.setLong(3, codice);
+        psIns.executeUpdate();
     }
 }

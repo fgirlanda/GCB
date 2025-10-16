@@ -14,6 +14,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import matibbajava.classi.Database;
+import matibbajava.classi.GestioneEccezioni;
 import matibbajava.classi.OutputManager;
 import matibbajava.classi.SceneManager;
 
@@ -181,7 +182,14 @@ public class PrincipaleController extends BasicController{
     }
 
     @FXML
-    public void inserisci(){
-
+    public void inserisci() throws SQLException {
+        if(dbsSelezionati.size() > 1){
+            GestioneEccezioni.errore("Seleziona un singolo database per l'inserimento", null, false, null);
+            return;
+        }
+        Database dbSelezionato = dbsSelezionati.get(0);
+        for(Long codice : listaCodici){
+            dbSelezionato.inserisciCodice(codice, null, null);
+        }
     }
 }
