@@ -23,7 +23,7 @@ public class OutputManager {
         String output = "Codice/i non presente/i.\n\n" +
                 "Spazi disponibili: "+spazi+"\n\n" +
                 "Codici disponibili generati: \n\n";
-        for(int i = 0; i < spazi;i++){
+        for(int i = 0; i < Math.min(spazi, codiciRichiesti.size());i++){
             output += codiciRichiesti.get(i) + "\n";
         }
         return output;

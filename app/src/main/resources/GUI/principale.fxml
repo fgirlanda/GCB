@@ -141,12 +141,12 @@
                   <Font size="14.0" />
                </font>
             </Button>
-            <Button fx:id="btnCopia" disable="true" mnemonicParsing="false" onAction="#copiaCodici" text="Copia codici">
+            <Button fx:id="btnCopia" mnemonicParsing="false" onAction="#copiaCodici" text="Copia codici">
                <font>
                   <Font size="14.0" />
                </font>
             </Button>
-            <Button fx:id="btnInserisci" disable="true" mnemonicParsing="false" onAction="#inserisci" text="Inserisci nel database">
+            <Button fx:id="btnInserisci" mnemonicParsing="false" onAction="#inserisci" text="Inserisci nel database">
                <font>
                   <Font size="14.0" />
                </font>

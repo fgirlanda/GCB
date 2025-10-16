@@ -105,42 +105,46 @@ public class PrincipaleController extends BasicController{
 
     @FXML
     public void verifica() throws SQLException {
-        dbsSelezionati.clear();
-        listaCodici.clear();
-        codiciPresenti.clear();
-        txtOutput.setText("");
-        int spazi = 0;
-        creaCodici();
-        boolean presente = false;
+        try {
+            dbsSelezionati.clear();
+            listaCodici.clear();
+            codiciPresenti.clear();
+            txtOutput.setText("");
+            int spazi = 0;
+            creaCodici();
+            boolean presente = false;
 
-        for(RadioButton r : radios) {
-            if(r.isSelected()) {
-                dbsSelezionati.add((Database)r.getUserData());
-            }
-        }
-        for(Database db : dbsSelezionati) {
-            for(Long codice : listaCodici){
-                if(db.checkDB(codice)){
-                    presente = true;
-                    if(codiciPresenti.containsKey(codice)){
-                        codiciPresenti.get(codice).add(db.getNome());
-                    }else{
-                        List<String> listaDB = new ArrayList<>();
-                        listaDB.add(db.getNome());
-                        codiciPresenti.put(codice, listaDB);
-                    }
-                }else{
-                    spazi++;
+            for(RadioButton r : radios) {
+                if(r.isSelected()) {
+                    dbsSelezionati.add((Database)r.getUserData());
                 }
             }
+            for(Database db : dbsSelezionati) {
+                for(Long codice : listaCodici){
+                    if(db.checkDB(codice)){
+                        presente = true;
+                        if(codiciPresenti.containsKey(codice)){
+                            codiciPresenti.get(codice).add(db.getNome());
+                        }else{
+                            List<String> listaDB = new ArrayList<>();
+                            listaDB.add(db.getNome());
+                            codiciPresenti.put(codice, listaDB);
+                        }
+                    }else{
+                        spazi++;
+                    }
+                }
+            }
+            String output = "";
+            if(presente) {
+                output = OutputManager.presente(codiciPresenti);
+            }else{
+                output = OutputManager.nonPresente(listaCodici, spazi);
+            }
+            txtOutput.setText(output);
+        } catch (Exception e) {
+            GestioneEccezioni.errore("errore", e, false, null);
         }
-        String output = "";
-        if(presente) {
-            output = OutputManager.presente(codiciPresenti);
-        }else{
-            output = OutputManager.nonPresente(listaCodici, spazi);
-        }
-        txtOutput.setText(output);
     }
 
 
