@@ -5,14 +5,14 @@ import java.util.List;
 
 public class OutputManager {
 
-    public static String presente(HashMap<Long, String> codiciPresenti){
+    public static String presente(HashMap<Long, List<String>> codiciPresenti){
         String output = "";
         if(codiciPresenti.size() == 1){
             output += "Il codice richiesto è già presente:\n\n";
         }else{
             output += "I codici richiesti sono già presenti:\n\n";
         }
-        output += "Codice\t\t\t\t" + "File\n\n";
+        output += "Codice\t\t\t\t" + "Database\n\n";
         for(Long codice : codiciPresenti.keySet()){
             output += codice + "\t\t" + codiciPresenti.get(codice) + "\n";
         }

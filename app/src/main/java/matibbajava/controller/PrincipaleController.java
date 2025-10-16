@@ -28,6 +28,8 @@ public class PrincipaleController extends BasicController{
     @FXML
     public GridPane grigliaDB;
     @FXML
+    public Label lblDBDir;
+    @FXML
     public RadioButton radioSelTutti;
     @FXML
     public TextField txtPaese;
@@ -41,7 +43,7 @@ public class PrincipaleController extends BasicController{
     public Text txtOutput;
 
     public List<Long> listaCodici = new ArrayList<>();
-    HashMap<Long, String> codiciPresenti = new HashMap<Long, String>();
+    HashMap<Long, List<String>> codiciPresenti = new HashMap<Long, List<String>>();
 
     private List<Database> dbs = new ArrayList<>();
     private List<Database> dbsSelezionati = new ArrayList<>();
@@ -69,6 +71,7 @@ public class PrincipaleController extends BasicController{
         chooser.setTitle("Seleziona cartella con file .db");
         File folder = chooser.showDialog(grigliaDB.getScene().getWindow());
         if (folder != null && folder.isDirectory()) {
+            lblDBDir.setText(folder.getAbsolutePath());
             loadDatabases(folder);
         }
     }
@@ -118,7 +121,13 @@ public class PrincipaleController extends BasicController{
             for(Long codice : listaCodici){
                 if(db.checkDB(codice)){
                     presente = true;
-                    codiciPresenti.put(codice, db.getNome());
+                    if(codiciPresenti.containsKey(codice)){
+                        codiciPresenti.get(codice).add(db.getNome());
+                    }else{
+                        List<String> listaDB = new ArrayList<>();
+                        listaDB.add(db.getNome());
+                        codiciPresenti.put(codice, listaDB);
+                    }
                 }else{
                     spazi++;
                 }

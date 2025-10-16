@@ -7,6 +7,8 @@
 - Gestione eccezioni intelligente
 - Più info su database
 - Calcolo spazi disponibili totali (999 - ultime 3 cifre)
+- File di log
+- Rilevare codici già duplicati nei file excel
 
 #TODO
 - Aggiungere bottone verifica (FATTO)

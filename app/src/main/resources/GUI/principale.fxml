@@ -39,6 +39,20 @@
             </Button>
          </children>
       </HBox>
+      <HBox alignment="CENTER_LEFT" spacing="15.0">
+         <children>
+            <Label text="Cartella selezionata: ">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblDBDir" text="*percorso cartella*">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
       <Separator opacity="0.5" />
       <HBox alignment="CENTER_LEFT" spacing="250.0">
          <children>
