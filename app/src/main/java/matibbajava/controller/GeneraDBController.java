@@ -74,7 +74,11 @@ public class GeneraDBController extends BasicController {
             return;
         }
         if (selectedOutputDir == null) {
-            GestioneEccezioni.errore("Nessuna cartella selezionara per l'output.",  null, false, null);
+            GestioneEccezioni.errore("Nessuna cartella selezionata per l'output.",  null, false, null);
+            return;
+        }if (selectedInputDir == null) {
+            GestioneEccezioni.errore("Nessuna cartella selezionara per l'input.",  null, false, null);
+            return;
         }
 
         Database db = new Database(nomeDB, selectedOutputDir);
