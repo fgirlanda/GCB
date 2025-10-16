@@ -18,7 +18,9 @@ import java.sql.SQLException;
 
 public class GeneraDBController extends BasicController {
     @FXML
-    public Label labelDirScelta;
+    public Label lblInputDir;
+    @FXML
+    public Label lblOutputDir;
     @FXML
     public TextField txtNomeDB;
     @FXML
@@ -29,13 +31,13 @@ public class GeneraDBController extends BasicController {
     public File selectedOutputDir;
 
     public void initialize() {
-        labelDirScelta.setText("Nessuna cartella selezionata");
+        lblInputDir.setText("Nessuna cartella selezionata");
     }
 
     @FXML
-    public void scegliCartella() {
+    public void scegliCartellaInput() {
         DirectoryChooser inputDir = new DirectoryChooser();
-        inputDir.setTitle("Seleziona una cartella");
+        inputDir.setTitle("Seleziona una cartella contenente file Excel da processare");
 
         // (Opzionale) imposta una cartella di partenza
         inputDir.setInitialDirectory(new File(System.getProperty("user.home")));
@@ -44,7 +46,23 @@ public class GeneraDBController extends BasicController {
         selectedInputDir = inputDir.showDialog(stage);
 
         if (selectedInputDir != null) {
-            labelDirScelta.setText(selectedInputDir.getAbsolutePath());
+            lblInputDir.setText(selectedInputDir.getAbsolutePath());
+        }
+    }
+
+    @FXML
+    public void scegliCartellaOutput() {
+        DirectoryChooser outputDir = new DirectoryChooser();
+        outputDir.setTitle("Seleziona la cartella in cui salvare il database");
+
+        // (Opzionale) imposta una cartella di partenza
+        outputDir.setInitialDirectory(new File(System.getProperty("user.home")));
+
+        // Mostra la finestra di dialogo
+        selectedOutputDir = outputDir.showDialog(stage);
+
+        if (selectedInputDir != null) {
+            lblOutputDir.setText(selectedOutputDir.getAbsolutePath());
         }
     }
 
@@ -55,11 +73,10 @@ public class GeneraDBController extends BasicController {
             GestioneEccezioni.errore("Nome database non valido", null, false, null);
             return;
         }
-        DirectoryChooser outputDir = new DirectoryChooser();
-        outputDir.setTitle("Seleziona la cartella dove salvare il database");
+        if (selectedOutputDir == null) {
+            GestioneEccezioni.errore("Nessuna cartella selezionara per l'output.",  null, false, null);
+        }
 
-        selectedOutputDir = outputDir.showDialog(stage);
-        if (selectedOutputDir == null) return;
         Database db = new Database(nomeDB, selectedOutputDir);
         ExcelReader exr = new ExcelReader(db, selectedInputDir);
         pBar.progressProperty().bind(exr.progressProperty());

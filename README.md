@@ -6,8 +6,15 @@
 - Interfaccia migliorata (abilita/disabilita pulsanti)
 - Gestione eccezioni intelligente
 - Più info su database
+- Calcolo spazi disponibili totali (999 - ultime 3 cifre)
 
 #TODO
-- Aggiungere bottone verifica
-- Implementare la verifica
+- Aggiungere bottone verifica (FATTO)
+- Implementare la verifica 
 - Configurare gestione output
+
+
+#ANALISI
+
+##Generazione database
+- 
