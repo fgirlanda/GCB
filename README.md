@@ -13,7 +13,7 @@
 
 ## 📄 Istruzioni per l'uso
 
-1) Scaricare [GCB.zip](https://github.com/fgirlanda/GCB/releases/tag/1.0)
+1) Scaricare [GCB-1.0.zip](https://github.com/fgirlanda/GCB/releases/tag/1.0)
 2) Estrarre il contenuto
 3) Fare doppio click sul file GCB.jar
 
