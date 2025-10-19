@@ -4,7 +4,7 @@
 
 ---
 
-# INSTALLAZIONE
+# 💻 INSTALLAZIONE
 
 ## 🧰 Requisiti
 
@@ -13,9 +13,11 @@
 
 ## 📄 Istruzioni per l'uso
 
-1) Scaricare GCB.zip
+1) Scaricare [GCB.zip](https://github.com/fgirlanda/GCB/releases/tag/1.0)
 2) Estrarre il contenuto
 3) Fare doppio click sul file GCB.jar
+
+# ⚙️ DETTAGLI
 
 ## 🚀 Funzionalità principali
 
